@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512" shape-rendering="crispEdges">
+  <!-- 整體背景（maskable 安全區） -->
+  <rect width="512" height="512" fill="#5D8A3A"/>
+  <!-- 內部視覺集中在中心 60% 範圍（102,102 → 410,410） -->
+  <rect x="102" y="102" width="308" height="308" fill="#7EC0EE"/>
+
+  <!-- Grass block 集中於中心 -->
+  <rect x="128" y="180" width="256" height="14" fill="#A8E060"/>
+  <rect x="128" y="194" width="256" height="60" fill="#5D8A3A"/>
+  <rect x="148" y="194" width="14" height="14" fill="#7FB040"/>
+  <rect x="200" y="194" width="14" height="14" fill="#7FB040"/>
+  <rect x="256" y="194" width="14" height="14" fill="#7FB040"/>
+  <rect x="312" y="194" width="14" height="14" fill="#7FB040"/>
+  <rect x="356" y="194" width="14" height="14" fill="#7FB040"/>
+  <rect x="128" y="254" width="256" height="100" fill="#8B5A2B"/>
+  <rect x="148" y="278" width="28" height="14" fill="#5A3A1A"/>
+  <rect x="232" y="304" width="40" height="12" fill="#A67B4A"/>
+  <rect x="320" y="268" width="22" height="20" fill="#5A3A1A"/>
+  <rect x="170" y="328" width="32" height="12" fill="#A67B4A"/>
+  <rect x="128" y="180" width="256" height="6" fill="#A8E060"/>
+  <rect x="128" y="180" width="6" height="174" fill="#A8E060" opacity="0.5"/>
+  <rect x="378" y="180" width="6" height="174" fill="#3D5E23"/>
+  <rect x="128" y="348" width="256" height="6" fill="#5A3A1A"/>
+
+  <!-- 鑽石劍 -->
+  <g transform="translate(256 270) rotate(-32)">
+    <rect x="-7" y="42" width="14" height="42" fill="#8B5A2B"/>
+    <rect x="-7" y="42" width="4" height="42" fill="#A67B4A"/>
+    <rect x="3" y="42" width="4" height="42" fill="#5A3A1A"/>
+    <rect x="-22" y="28" width="44" height="14" fill="#FFC830"/>
+    <rect x="-22" y="28" width="44" height="4" fill="#FFE066"/>
+    <rect x="-22" y="38" width="44" height="4" fill="#B8860B"/>
+    <rect x="-7" y="-92" width="14" height="120" fill="#A8E5FF"/>
+    <rect x="-7" y="-92" width="4" height="120" fill="#FFFFFF"/>
+    <rect x="3" y="-92" width="4" height="120" fill="#5DA8DD"/>
+    <polygon points="-7,-92 0,-108 7,-92" fill="#A8E5FF"/>
+    <polygon points="-7,-92 0,-108 0,-92" fill="#FFFFFF"/>
+  </g>
+
+  <!-- ABC 文字 -->
+  <g font-family="'Press Start 2P', monospace" font-weight="bold" font-size="38" text-anchor="middle">
+    <text x="259" y="395" fill="#000000">ABC</text>
+    <text x="256" y="392" fill="#FFD700">ABC</text>
+  </g>
+</svg>

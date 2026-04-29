@@ -1,0 +1,51 @@
+{
+  "name": "國中必備 3000 單字 · 像素冒險",
+  "short_name": "3000 單字",
+  "description": "Minecraft 風像素打怪英文單字學習遊戲。150 關 × 20 字 = 3000 字，含每日挑戰、錯題複習、雙玩家存檔。",
+  "lang": "zh-Hant",
+  "start_url": "./英文單字挑戰.html",
+  "scope": "./",
+  "id": "/mc-vocab-3000/",
+  "display": "standalone",
+  "display_override": ["standalone", "minimal-ui"],
+  "orientation": "any",
+  "background_color": "#7EC0EE",
+  "theme_color": "#5D8A3A",
+  "categories": ["education", "games", "kids"],
+  "prefer_related_applications": false,
+  "icons": [
+    {
+      "src": "icons/icon-192.svg",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable.svg",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "每日挑戰",
+      "short_name": "每日",
+      "description": "今日 10 題挑戰",
+      "url": "./英文單字挑戰.html#daily"
+    },
+    {
+      "name": "錯題複習",
+      "short_name": "錯題",
+      "description": "複習錯過的單字",
+      "url": "./英文單字挑戰.html#mistakes"
+    }
+  ]
+}

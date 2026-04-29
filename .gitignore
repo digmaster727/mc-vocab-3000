@@ -1,0 +1,24 @@
+# 系統
+.DS_Store
+Thumbs.db
+desktop.ini
+*.swp
+*~
+
+# 編輯器
+.vscode/
+.idea/
+*.sublime-*
+
+# 暫存
+*.log
+*.tmp
+*.bak
+
+# 建構（這個專案目前沒有 build，但留著預防之後加）
+node_modules/
+dist/
+.cache/
+
+# 測試
+coverage/

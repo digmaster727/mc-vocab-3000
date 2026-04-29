@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>國中必備3000單字 · 像素冒險</title>
+
+  <!-- ========== PWA 設定 ========== -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#5D8A3A">
+  <meta name="application-name" content="3000 單字">
+  <meta name="description" content="Minecraft 風像素打怪英文單字學習遊戲。150 關 × 20 字 = 3000 字。">
+
+  <!-- iOS 加到主畫面 -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="3000 單字">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <link rel="apple-touch-icon" href="icons/icon-192.svg">
+  <link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.svg">
+  <link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.svg">
+
+  <!-- 一般 favicon -->
+  <link rel="icon" type="image/svg+xml" href="icons/icon-192.svg">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/minecraft-theme.css">
+</head>
+<body>
+  <div id="app">
+
+    <!-- ========== 使用者選擇 ========== -->
+    <section id="user-screen" class="screen active">
+      <div class="start-inner">
+        <h1 class="pixel-title">
+          <span class="title-line">選 擇 玩 家</span>
+        </h1>
+        <p class="subtitle">⚔ 各自儲存進度與封號 ⚔</p>
+        <div class="user-grid" id="user-grid"></div>
+
+        <button class="mc-btn-link" id="btn-user-back" type="button" hidden>← 返回</button>
+      </div>
+    </section>
+
+    <!-- ========== 起始畫面 ========== -->
+    <section id="start-screen" class="screen">
+      <div class="start-inner">
+        <div class="user-bar">
+          <span class="user-pill" id="current-user">👤 —</span>
+          <span class="title-pill" id="current-title">🌱 新手</span>
+          <button class="mc-btn-link" id="btn-switch-user" type="button">🔄 換玩家</button>
+        </div>
+
+        <h1 class="pixel-title">
+          <span class="title-line">國中必備</span>
+          <span class="title-line title-big">3000 單字</span>
+        </h1>
+        <p class="subtitle">⚔ 像素打怪單字冒險 ⚔</p>
+
+        <div class="save-summary" id="start-summary">⭐ 0/0  💎 0</div>
+
+        <button class="mc-btn mc-btn--wood" id="btn-play" type="button">開 始 冒 險</button>
+
+        <div class="start-modes">
+          <button class="mc-btn mc-btn--dirt mc-btn--sm" id="btn-daily" type="button">
+            🌟 每日挑戰 <span class="badge" id="daily-badge">!</span>
+          </button>
+          <button class="mc-btn mc-btn--stone mc-btn--sm" id="btn-mistakes" type="button">
+            📓 錯題複習 <span class="badge" id="mistake-badge">0</span>
+          </button>
+        </div>
+
+        <ul class="rule-list">
+          <li>150 關 × 20 字（共 3000 字），同關多次玩不重複出題</li>
+          <li>主角揮劍砍怪 +10💎；擊倒怪物 +5💎</li>
+          <li>答錯扣 1 顆愛心，錯字會自動進入「錯題池」</li>
+          <li>🌟 每日挑戰首勝額外 +50💎</li>
+          <li>💎 可在商店買道具：補血、強擊、砍半、跳過</li>
+        </ul>
+
+        <button class="mc-btn-link" id="btn-clear-save" type="button">🗑 清除存檔</button>
+      </div>
+    </section>
+
+    <!-- ========== 關卡選單 ========== -->
+    <section id="level-select-screen" class="screen">
+      <header class="select-header">
+        <button class="mc-btn mc-btn--stone mc-btn--sm" id="btn-back-to-start" type="button">← 返回</button>
+        <h2 class="select-title">選 擇 關 卡</h2>
+        <div class="select-actions">
+          <span class="title-pill" id="select-title-pill">🌱 新手</span>
+          <button class="mc-btn mc-btn--wood mc-btn--sm" id="btn-shop" type="button">🛒 商店</button>
+          <div class="save-summary save-summary--inline" id="select-summary">⭐ 0/0  💎 0</div>
+        </div>
+      </header>
+      <div class="level-grid" id="level-grid"></div>
+    </section>
+
+    <!-- ========== 商店 ========== -->
+    <section id="shop-screen" class="screen">
+      <header class="select-header">
+        <button class="mc-btn mc-btn--stone mc-btn--sm" id="btn-shop-back" type="button">← 返回</button>
+        <h2 class="select-title">🛒 道 具 商 店</h2>
+        <div class="save-summary save-summary--inline" id="shop-gems">💎 0</div>
+      </header>
+      <div class="shop-grid" id="shop-grid"></div>
+    </section>
+
+    <!-- ========== 遊戲畫面 ========== -->
+    <section id="game-screen" class="screen">
+      <header class="hud">
+        <button class="mc-btn mc-btn--stone mc-btn--sm hud-quit" id="btn-quit" type="button" title="返回選單 (Esc)">✕</button>
+        <div class="hud-hearts" id="hud-hearts" aria-label="血量"></div>
+        <div class="hud-gems" aria-label="寶石積分">
+          <span class="gem-icon">💎</span>
+          <span id="hud-score">0</span>
+        </div>
+        <div class="hud-streak" id="hud-streak" hidden aria-label="連勝">
+          🔥 連勝 <span id="streak-num">0</span>
+        </div>
+        <div class="hud-progress" id="hud-progress">1 / 10</div>
+      </header>
+
+      <div class="level-title" id="level-title">Lv.1</div>
+
+      <main class="battle-area" id="battle-area">
+
+        <!-- 怪物戰場 -->
+        <div class="monster-stage">
+          <div class="monster-hp-bar">
+            <div class="hp-fill" id="monster-hp-fill"></div>
+            <span class="hp-text" id="monster-hp-text">3 / 3</span>
+          </div>
+
+          <!-- 主角（Steve + 鑽石劍） -->
+          <div class="player" id="player" aria-hidden="true">
+            <div class="player-sprite" id="player-sprite"></div>
+          </div>
+
+          <!-- 怪物（中央） -->
+          <div class="monster" id="monster">
+            <div class="monster-sprite" id="monster-sprite"></div>
+            <div class="slash-effect" id="slash-effect"></div>
+          </div>
+        </div>
+
+        <!-- 單字卡 -->
+        <div class="word-card">
+          <div class="word-text" id="word-text">—</div>
+          <button class="mc-btn mc-btn--stone mc-btn--sm" id="btn-speak" type="button">🔊 發音</button>
+        </div>
+
+        <!-- 提示 -->
+        <div class="hint-block">
+          <button class="mc-btn mc-btn--dirt mc-btn--sm" id="btn-hint" type="button">🧠 記憶提示</button>
+          <div class="hint-content" id="hint-content" hidden></div>
+        </div>
+
+        <!-- 選項 -->
+        <div class="options" id="options"></div>
+
+        <!-- 道具列 -->
+        <div class="item-bar" id="item-bar"></div>
+
+      </main>
+    </section>
+
+    <!-- ========== 結算畫面 ========== -->
+    <section id="end-screen" class="screen">
+      <div class="end-inner">
+        <h2 class="pixel-title" id="end-title">🎉 關卡完成！</h2>
+        <div class="end-level-name" id="end-level-name">Lv.1</div>
+        <div class="star-display" id="star-display">⭐⭐⭐</div>
+        <div class="end-newbest" id="end-newbest" hidden>🏆 新紀錄！</div>
+        <div class="end-stats">
+          <p>💎 本次寶石：<span id="end-score">0</span></p>
+          <p>👹 擊倒怪物：<span id="end-killed">0</span></p>
+          <p>❤️ 剩餘血量：<span id="end-hearts">0</span></p>
+          <p id="end-rank" class="end-rank"></p>
+        </div>
+        <div class="end-actions">
+          <button class="mc-btn mc-btn--wood" id="btn-retry" type="button">🔁 再玩一次</button>
+          <button class="mc-btn mc-btn--stone" id="btn-to-select" type="button">📋 回選單</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+  <script src="js/vocab-data.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- ========== Service Worker 註冊（PWA 離線可玩） ========== -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('sw.js')
+          .then((reg) => {
+            console.log('[PWA] Service Worker 註冊成功，scope:', reg.scope);
+            // 偵測新版本
+            reg.addEventListener('updatefound', () => {
+              const nw = reg.installing;
+              if (!nw) return;
+              nw.addEventListener('statechange', () => {
+                if (nw.state === 'installed' && navigator.serviceWorker.controller) {
+                  console.log('[PWA] 偵測到新版本，重新載入頁面以更新');
+                }
+              });
+            });
+          })
+          .catch((err) => {
+            console.warn('[PWA] Service Worker 註冊失敗:', err);
+            console.warn('[PWA] 提示：PWA 需要 https:// 或 http://localhost 環境，無法在 file:// 直接運作。');
+          });
+      });
+    }
+
+    // 鎖定螢幕方向（行動裝置橫向更佳，但允許自由旋轉）
+    if (screen.orientation && screen.orientation.unlock) {
+      try { screen.orientation.unlock(); } catch (_) {}
+    }
+  </script>
+</body>
+</html>

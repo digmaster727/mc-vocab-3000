@@ -1,0 +1,1379 @@
+/* ===================================================================
+ * Minecraft Pixel Theme · 國中必備3000單字
+ * Palette: Grass / Dirt / Stone / Wood / Sky
+ * =================================================================== */
+
+/* 中文像素字體（Cubic 11） + 英文像素字體 Press Start 2P */
+@font-face {
+  font-family: 'Cubic 11';
+  src: url('https://cdn.jsdelivr.net/gh/ACh-K/Cubic-11@main/fonts/Cubic_11_1.100_R.woff2') format('woff2'),
+       url('https://cdn.jsdelivr.net/gh/ACh-K/Cubic-11@main/fonts/Cubic_11_1.100_R.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- 設計 Token ---------- */
+:root {
+  --grass-light: #7FB040;
+  --grass:       #5D8A3A;
+  --grass-dark:  #3D5E23;
+
+  --dirt-light:  #A67B4A;
+  --dirt:        #8B5A2B;
+  --dirt-dark:   #5A3A1A;
+
+  --stone-light: #A8A8A8;
+  --stone:       #7D7D7D;
+  --stone-dark:  #5A5A5A;
+  --stone-shadow:#3D3D3D;
+
+  --wood-light:  #C49A6C;
+  --wood:        #A67B4A;
+  --wood-dark:   #7D5A34;
+
+  --sky:         #7EC0EE;
+  --sky-light:   #B3E0FF;
+
+  --gem:         #4FC3F7;
+  --gold:        #F4C430;
+  --heart:       #E44040;
+  --heart-dark:  #8B1E1E;
+
+  --text-light:  #FFFFFF;
+  --text-dark:   #1A1A1A;
+
+  --correct:     #4CAF50;
+  --wrong:       #C62828;
+
+  --font-pixel:  'Cubic 11', 'Press Start 2P', 'VT323', 'Courier New', monospace;
+  --tile:        4px; /* 1 像素 = 4 螢幕像素，方塊感基準 */
+}
+
+/* ---------- Reset ---------- */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body {
+  height: 100%;
+  font-family: var(--font-pixel);
+  color: var(--text-light);
+  background: var(--sky);
+  image-rendering: pixelated;
+  -webkit-font-smoothing: none;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+  /* PWA / 行動裝置：避免 iOS 雙擊放大、上下回彈、長按彈出選單 */
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  overscroll-behavior: none;
+  /* 留 safe-area（劉海／圓角螢幕） */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+body {
+  /* 草原 + 雲朵的像素化漸層背景 */
+  background:
+    linear-gradient(to bottom,
+      var(--sky) 0%,
+      var(--sky) 55%,
+      var(--grass-light) 55%,
+      var(--grass) 62%,
+      var(--dirt) 68%,
+      var(--dirt-dark) 100%);
+  background-attachment: fixed;
+}
+
+#app {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+}
+
+/* ---------- Screens ---------- */
+.screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out;
+}
+.screen.active { display: flex; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ---------- Pixel Title ---------- */
+.pixel-title {
+  font-family: var(--font-pixel);
+  font-size: clamp(28px, 6vw, 56px);
+  color: var(--text-light);
+  text-align: center;
+  letter-spacing: 2px;
+  line-height: 1.4;
+  text-shadow:
+    var(--tile) 0 0 var(--stone-dark),
+    0 var(--tile) 0 var(--stone-dark),
+    var(--tile) var(--tile) 0 var(--stone-shadow);
+  margin-bottom: 16px;
+}
+.title-line { display: block; }
+.title-big {
+  color: var(--gold);
+  font-size: 1.2em;
+}
+.subtitle {
+  font-size: clamp(14px, 2.4vw, 20px);
+  color: var(--text-light);
+  text-shadow: 2px 2px 0 var(--stone-dark);
+  margin-bottom: 28px;
+}
+
+.start-inner, .end-inner {
+  background: var(--dirt);
+  border: var(--tile) solid var(--dirt-dark);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--dirt-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--dirt-dark),
+    0 8px 0 var(--stone-shadow);
+  padding: clamp(20px, 4vw, 36px);
+  max-width: 560px;
+  width: 100%;
+  text-align: center;
+}
+
+.rule-list {
+  list-style: none;
+  margin-top: 20px;
+  text-align: left;
+  font-size: clamp(12px, 1.8vw, 15px);
+  color: var(--text-light);
+  line-height: 1.9;
+}
+.rule-list li::before {
+  content: '▪ ';
+  color: var(--gold);
+  margin-right: 4px;
+}
+
+/* ---------- 使用者選擇畫面 ---------- */
+.user-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;       /* 強制兩欄並排 */
+  gap: 16px;
+  margin: 24px 0 12px;
+  width: 100%;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.user-cta {
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--gold);
+  letter-spacing: 1px;
+  background: rgba(0,0,0,.35);
+  padding: 3px 8px;
+  border-radius: 8px;
+  animation: ctaPulse 1.4s ease-in-out infinite;
+}
+@keyframes ctaPulse {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.08); }
+}
+.user-card {
+  background: var(--stone);
+  border: var(--tile) solid var(--stone-dark);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--stone-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--stone-shadow),
+    0 6px 0 var(--stone-shadow);
+  font-family: var(--font-pixel);
+  color: var(--text-light);
+  padding: 16px 10px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  transition: transform 0.1s;
+}
+.user-card:hover { transform: translateY(-3px); filter: brightness(1.1); }
+.user-card:active { transform: translateY(2px); }
+.user-card.is-active {
+  background: var(--grass);
+  border-color: var(--grass-dark);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--grass-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--grass-dark),
+    0 6px 0 var(--stone-shadow),
+    0 0 0 4px var(--gold);
+}
+.user-avatar { font-size: 44px; line-height: 1; }
+.user-name {
+  font-size: clamp(20px, 3.5vw, 26px);
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-shadow: 2px 2px 0 #000;
+}
+.user-title-pill {
+  font-size: 13px;
+  background: rgba(0,0,0,.4);
+  border: 2px solid var(--gold);
+  padding: 2px 10px;
+  border-radius: 12px;
+}
+.user-stat {
+  font-size: 13px;
+  color: var(--text-light);
+  opacity: 0.95;
+}
+
+/* ---------- 起始畫面：使用者列 + 封號 pill ---------- */
+.user-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+.user-pill {
+  background: rgba(0,0,0,.5);
+  color: var(--gold);
+  padding: 4px 12px;
+  border: 2px solid var(--gold);
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+.title-pill {
+  background: rgba(0,0,0,.55);
+  color: var(--gold);
+  padding: 4px 10px;
+  border: 2px solid var(--gold);
+  font-size: 13px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+
+/* ---------- 起始畫面：模式按鈕（每日挑戰 / 錯題複習） ---------- */
+.start-modes {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin: 14px 0 4px;
+  flex-wrap: wrap;
+}
+.start-modes .mc-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 徽章（顯示錯題數 / 每日是否完成） */
+.badge {
+  display: inline-block;
+  min-width: 22px;
+  padding: 1px 6px;
+  border-radius: 10px;
+  background: var(--stone-dark);
+  color: var(--text-light);
+  font-size: 12px;
+  line-height: 1.4;
+  text-align: center;
+  border: 2px solid var(--stone-shadow);
+  margin-left: 4px;
+  vertical-align: middle;
+}
+.badge--alert {
+  background: var(--heart);
+  border-color: var(--heart-dark);
+  color: #fff;
+  animation: badgePulse 1.6s ease-in-out infinite;
+}
+.badge--ok {
+  background: var(--correct);
+  border-color: #2E7D32;
+  color: #fff;
+}
+.badge--mute {
+  background: var(--stone);
+  border-color: var(--stone-shadow);
+  color: var(--text-light);
+  opacity: 0.85;
+}
+@keyframes badgePulse {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.12); }
+}
+
+/* ===================================================================
+ * Minecraft 立體按鈕 (石塊 / 木板 / 泥土)
+ * 用 box-shadow 疊出上亮下暗的 3D 邊框
+ * =================================================================== */
+.mc-btn {
+  display: inline-block;
+  font-family: var(--font-pixel);
+  font-size: clamp(14px, 2.2vw, 18px);
+  letter-spacing: 2px;
+  color: var(--text-light);
+  padding: 14px 28px;
+  border: 0;
+  cursor: pointer;
+  position: relative;
+  margin: 8px 4px;
+  text-shadow: 2px 2px 0 rgba(0,0,0,.4);
+  image-rendering: pixelated;
+  transition: transform 60ms linear, filter 60ms linear;
+  outline: none;
+}
+.mc-btn:focus-visible {
+  filter: brightness(1.15);
+}
+
+/* 石塊按鈕 */
+.mc-btn--stone {
+  background: var(--stone);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--stone-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--stone-dark),
+    0 var(--tile) 0 var(--stone-shadow);
+}
+/* 木板按鈕 */
+.mc-btn--wood {
+  background: var(--wood);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--wood-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--wood-dark),
+    0 var(--tile) 0 var(--stone-shadow);
+}
+/* 泥土按鈕 */
+.mc-btn--dirt {
+  background: var(--dirt);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--dirt-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--dirt-dark),
+    0 var(--tile) 0 var(--stone-shadow);
+}
+
+/* hover */
+.mc-btn:hover { filter: brightness(1.08); }
+
+/* 按下回饋：整顆方塊下沉 */
+.mc-btn:active {
+  transform: translateY(var(--tile));
+  box-shadow:
+    inset var(--tile) var(--tile) 0 rgba(255,255,255,.15),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 rgba(0,0,0,.25),
+    0 0 0 var(--stone-shadow);
+}
+
+/* 小尺寸按鈕 */
+.mc-btn--sm {
+  font-size: clamp(11px, 1.6vw, 14px);
+  padding: 8px 14px;
+  letter-spacing: 1px;
+}
+
+/* ===================================================================
+ * HUD （血量 / 寶石 / 進度）
+ * =================================================================== */
+.hud {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 16px;
+  background: rgba(0,0,0,.35);
+  border: var(--tile) solid var(--stone-dark);
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,.08);
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.hud-hearts { display: flex; gap: 4px; font-size: clamp(20px, 3vw, 26px); }
+.heart { filter: drop-shadow(2px 2px 0 rgba(0,0,0,.4)); transition: transform .2s ease; }
+.heart.lost { filter: grayscale(1) opacity(.5); }
+.heart.shake { animation: heartShake .4s ease; }
+@keyframes heartShake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-6px) rotate(-8deg); }
+  40% { transform: translateX(6px)  rotate(8deg); }
+  60% { transform: translateX(-4px) rotate(-4deg); }
+  80% { transform: translateX(4px)  rotate(4deg); }
+}
+.hud-gems {
+  font-size: clamp(16px, 2.4vw, 22px);
+  color: var(--gem);
+  text-shadow: 2px 2px 0 var(--stone-dark);
+}
+.gem-icon { filter: drop-shadow(2px 2px 0 rgba(0,0,0,.4)); margin-right: 4px; }
+.hud-progress {
+  font-size: clamp(14px, 2vw, 18px);
+  color: var(--text-light);
+  text-shadow: 2px 2px 0 var(--stone-dark);
+}
+/* HUD 連勝指示器 */
+.hud-streak {
+  font-size: clamp(13px, 1.9vw, 16px);
+  color: #FFC830;
+  background: rgba(0,0,0,.5);
+  padding: 3px 10px;
+  border: 2px solid #FFC830;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0 #000;
+  animation: streakBeat 0.8s ease-in-out infinite;
+}
+.hud-streak.is-hot {
+  color: #FF6B00;
+  border-color: #FF6B00;
+  box-shadow: 0 0 8px #FF8A20, 0 0 16px rgba(255,138,32,.6);
+  animation: streakHot 0.5s ease-in-out infinite;
+}
+.hud-streak #streak-num {
+  color: #fff;
+  font-weight: bold;
+  margin: 0 2px;
+}
+@keyframes streakBeat {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.05); }
+}
+@keyframes streakHot {
+  0%,100% { transform: scale(1) rotate(-1deg); }
+  50%     { transform: scale(1.12) rotate(1deg); }
+}
+
+/* ===================================================================
+ * Stage
+ * =================================================================== */
+.stage {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+/* 單字方塊 (像被挖的石塊) */
+.word-block {
+  position: relative;
+  background: var(--stone);
+  border: var(--tile) solid var(--stone-dark);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--stone-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--stone-dark);
+  padding: 16px 20px;
+  width: min(560px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+.word-image {
+  width: clamp(80px, 18vw, 128px);
+  height: clamp(80px, 18vw, 128px);
+  background: var(--stone-dark);
+  border: var(--tile) solid var(--stone-shadow);
+  image-rendering: pixelated;
+  overflow: hidden;
+}
+.word-image svg { display: block; width: 100%; height: 100%; }
+.word-text {
+  font-family: 'Press Start 2P', var(--font-pixel);
+  font-size: clamp(22px, 4vw, 36px);
+  color: var(--gold);
+  text-shadow: 3px 3px 0 var(--stone-shadow);
+  letter-spacing: 2px;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* 方塊被敲碎動畫 */
+.word-block.cracked {
+  animation: crack 0.5s ease forwards;
+}
+@keyframes crack {
+  0%   { transform: translate(0,0); }
+  20%  { transform: translate(-4px,2px) rotate(-1deg); }
+  40%  { transform: translate(4px,-2px) rotate(1deg); filter: brightness(1.3); }
+  60%  { transform: translate(-2px,3px); }
+  100% { transform: translate(0,0); filter: brightness(1); }
+}
+.word-block.cracked::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(45deg, transparent 45%, rgba(0,0,0,.6) 46%, rgba(0,0,0,.6) 48%, transparent 49%),
+    linear-gradient(-45deg, transparent 45%, rgba(0,0,0,.6) 46%, rgba(0,0,0,.6) 48%, transparent 49%);
+  background-size: 40px 40px;
+  pointer-events: none;
+  animation: fadeIn .2s;
+}
+
+/* 方塊晃動 (答錯) */
+.word-block.shake { animation: blockShake 0.4s ease; }
+@keyframes blockShake {
+  0%,100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+/* ===================================================================
+ * 提示方塊
+ * =================================================================== */
+.hint-block {
+  width: min(560px, 90vw);
+  text-align: center;
+}
+.hint-content {
+  margin-top: 8px;
+  background: var(--wood-dark);
+  border: var(--tile) solid var(--wood-dark);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--wood),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 #4a3420;
+  color: var(--text-light);
+  padding: 12px 16px;
+  font-size: clamp(13px, 2vw, 16px);
+  line-height: 1.7;
+  text-align: left;
+  animation: slideDown 0.25s ease;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ===================================================================
+ * 選項按鈕（2x2 網格）
+ * =================================================================== */
+.options {
+  width: min(560px, 90vw);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.option-btn {
+  width: 100%;
+  min-height: 56px;
+  font-size: clamp(14px, 2.2vw, 18px);
+  letter-spacing: 1px;
+  word-break: break-word;
+}
+.option-btn.correct {
+  background: var(--correct) !important;
+  box-shadow:
+    inset var(--tile) var(--tile) 0 #7BC47F,
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 #2E7D32,
+    0 var(--tile) 0 var(--stone-shadow) !important;
+  animation: pulse .3s ease;
+}
+.option-btn.wrong {
+  background: var(--wrong) !important;
+  box-shadow:
+    inset var(--tile) var(--tile) 0 #EF5350,
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 #8B0000,
+    0 var(--tile) 0 var(--stone-shadow) !important;
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); }
+  50%     { transform: scale(1.06); }
+}
+
+/* ===================================================================
+ * End screen
+ * =================================================================== */
+.end-stats {
+  font-size: clamp(16px, 2.6vw, 22px);
+  line-height: 2.2;
+  margin: 16px 0 24px;
+  color: var(--text-light);
+}
+.end-rank {
+  color: var(--gold);
+  font-size: clamp(18px, 3vw, 26px);
+  margin-top: 12px;
+  text-shadow: 2px 2px 0 var(--stone-dark);
+}
+
+/* ===================================================================
+ * 存檔資訊
+ * =================================================================== */
+.save-summary {
+  display: inline-block;
+  padding: 8px 14px;
+  margin: 12px 0;
+  background: rgba(0,0,0,.45);
+  border: 3px solid var(--stone-dark);
+  font-size: clamp(13px, 2vw, 16px);
+  color: var(--text-light);
+  letter-spacing: 1px;
+}
+.save-summary b { color: var(--gold); }
+.save-summary--inline { margin: 0; }
+
+/* 「清除存檔」連結式小按鈕 */
+.mc-btn-link {
+  display: inline-block;
+  margin-top: 18px;
+  padding: 6px 10px;
+  background: transparent;
+  border: 2px dashed rgba(255,255,255,.35);
+  color: rgba(255,255,255,.65);
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: color .15s, border-color .15s;
+}
+.mc-btn-link:hover {
+  color: var(--heart);
+  border-color: var(--heart);
+}
+
+/* ===================================================================
+ * 關卡選單
+ * =================================================================== */
+#level-select-screen { justify-content: flex-start; padding: 12px; }
+
+.select-header {
+  width: 100%;
+  max-width: 960px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(0,0,0,.4);
+  border: var(--tile) solid var(--stone-dark);
+  margin-bottom: 12px;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.select-title {
+  font-family: var(--font-pixel);
+  font-size: clamp(18px, 3vw, 26px);
+  color: var(--gold);
+  letter-spacing: 3px;
+  text-shadow: 2px 2px 0 var(--stone-dark);
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.level-grid {
+  width: 100%;
+  max-width: 960px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px;
+  padding: 4px;
+  overflow-y: auto;
+  flex: 1;
+  align-content: flex-start;
+}
+.level-grid::-webkit-scrollbar { width: 10px; }
+.level-grid::-webkit-scrollbar-track { background: var(--stone-dark); }
+.level-grid::-webkit-scrollbar-thumb {
+  background: var(--stone);
+  border: 2px solid var(--stone-dark);
+}
+
+.level-card {
+  background: var(--stone);
+  border: var(--tile) solid var(--stone-dark);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--stone-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--stone-dark),
+    0 var(--tile) 0 var(--stone-shadow);
+  padding: 10px 6px;
+  font-family: var(--font-pixel);
+  color: var(--text-light);
+  cursor: pointer;
+  text-align: center;
+  transition: transform .08s, filter .15s;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+}
+.level-card:hover { filter: brightness(1.1); }
+.level-card:active {
+  transform: translateY(var(--tile));
+  box-shadow:
+    inset var(--tile) var(--tile) 0 rgba(255,255,255,.1),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 rgba(0,0,0,.25),
+    0 0 0 var(--stone-shadow);
+}
+.level-card--done {
+  background: var(--wood);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--wood-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--wood-dark),
+    0 var(--tile) 0 var(--stone-shadow);
+}
+.level-card--gold {
+  background: var(--gold);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 #FFE066,
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 #B8860B,
+    0 var(--tile) 0 var(--stone-shadow);
+  color: var(--text-dark);
+  text-shadow: 1px 1px 0 rgba(255,255,255,.4);
+}
+.level-card--gold .level-num,
+.level-card--gold .level-name,
+.level-card--gold .level-best { color: var(--text-dark); }
+
+.level-num {
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--text-light);
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
+}
+.level-emoji {
+  font-size: 32px;
+  margin: 4px 0;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,.3));
+}
+.level-name {
+  font-size: 12px;
+  line-height: 1.3;
+  min-height: 32px;
+  padding: 0 4px;
+  color: var(--text-light);
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
+}
+.level-stars {
+  font-size: 14px;
+  margin-top: 4px;
+  letter-spacing: 2px;
+}
+.level-best {
+  font-size: 10px;
+  color: var(--gem);
+  margin-top: 2px;
+  text-shadow: 1px 1px 0 rgba(0,0,0,.4);
+}
+
+/* ===================================================================
+ * 遊戲畫面：關卡標題 + 退出鈕
+ * =================================================================== */
+.level-title {
+  font-family: var(--font-pixel);
+  font-size: clamp(14px, 2.2vw, 18px);
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 var(--stone-dark);
+  margin-bottom: 8px;
+  text-align: center;
+}
+.hud-quit {
+  padding: 6px 12px;
+  font-size: 14px;
+  letter-spacing: 0;
+}
+
+/* ===================================================================
+ * 結算畫面
+ * =================================================================== */
+.end-level-name {
+  font-family: var(--font-pixel);
+  font-size: clamp(14px, 2.4vw, 18px);
+  color: var(--gold);
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0 var(--stone-dark);
+  margin-top: -6px;
+  margin-bottom: 12px;
+}
+.star-display {
+  font-size: clamp(36px, 7vw, 56px);
+  text-align: center;
+  letter-spacing: 12px;
+  margin: 14px 0;
+  filter: drop-shadow(3px 3px 0 var(--stone-dark));
+  animation: starPop .6s ease;
+}
+@keyframes starPop {
+  0%   { transform: scale(0.4); opacity: 0; }
+  60%  { transform: scale(1.15); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.end-newbest {
+  background: var(--gold);
+  color: var(--text-dark);
+  font-family: var(--font-pixel);
+  font-size: clamp(14px, 2.4vw, 18px);
+  letter-spacing: 2px;
+  padding: 8px 16px;
+  display: inline-block;
+  border: var(--tile) solid #B8860B;
+  margin-bottom: 12px;
+  text-shadow: 1px 1px 0 rgba(255,255,255,.5);
+  animation: newBestPulse 1.2s ease infinite;
+}
+@keyframes newBestPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.05); filter: brightness(1.15); }
+}
+.end-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+/* ===================================================================
+ * 戰鬥區（怪物 + 單字 + 選項 + 道具列）
+ * =================================================================== */
+.battle-area {
+  width: 100%;
+  max-width: 700px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+}
+.battle-area.player-hit {
+  animation: screenShake 0.4s ease;
+}
+@keyframes screenShake {
+  0%,100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); filter: hue-rotate(-15deg) brightness(1.2); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-6px); filter: hue-rotate(-15deg) brightness(1.2); }
+  80% { transform: translateX(6px); }
+}
+
+/* 怪物舞台 */
+.monster-stage {
+  width: min(420px, 90vw);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  position: relative;
+}
+
+/* 怪物血條 */
+.monster-hp-bar {
+  width: 100%;
+  height: 18px;
+  background: var(--stone-shadow);
+  border: 3px solid var(--stone-dark);
+  position: relative;
+  box-shadow: inset 2px 2px 0 rgba(0,0,0,.4);
+}
+.hp-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(to bottom, #7FB040, #5D8A3A);
+  transition: width 0.4s ease, background 0.4s;
+  box-shadow: inset 2px 2px 0 rgba(255,255,255,.3);
+}
+.hp-text {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-pixel);
+  font-size: 12px;
+  color: var(--text-light);
+  text-shadow: 1px 1px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000;
+}
+
+/* 怪物本體 */
+.monster {
+  width: clamp(120px, 30vw, 180px);
+  height: clamp(120px, 30vw, 180px);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 6px 0 var(--stone-shadow));
+  /* 飄浮動畫 */
+  animation: monsterFloat 2.4s ease-in-out infinite;
+}
+@keyframes monsterFloat {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-6px); }
+}
+.monster-sprite {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.monster-sprite svg { width: 100%; height: 100%; }
+
+.monster-sprite.spawn {
+  animation: monsterSpawn 0.5s ease;
+}
+@keyframes monsterSpawn {
+  0%   { transform: scale(0) rotate(180deg); opacity: 0; }
+  60%  { transform: scale(1.2) rotate(0); opacity: 1; }
+  100% { transform: scale(1); }
+}
+
+/* 怪物受擊：紅閃+晃動 */
+.monster.hit .monster-sprite {
+  animation: monsterHit 0.4s ease;
+}
+@keyframes monsterHit {
+  0%,100% { transform: translateX(0); filter: brightness(1); }
+  20% { transform: translateX(-8px); filter: brightness(2.5) sepia(1) hue-rotate(-50deg) saturate(5); }
+  40% { transform: translateX(8px);  filter: brightness(2) sepia(1) hue-rotate(-50deg) saturate(4); }
+  60% { transform: translateX(-4px); filter: brightness(1.5); }
+  80% { transform: translateX(4px); }
+}
+
+/* 怪物攻擊玩家：放大撲過來 */
+.monster.attack {
+  animation: monsterAttack 0.5s ease;
+}
+@keyframes monsterAttack {
+  0%,100% { transform: scale(1) translateY(0); }
+  50%     { transform: scale(1.25) translateY(20px); filter: brightness(1.4); }
+}
+
+/* 怪物死亡：旋轉爆破淡出 */
+.monster.die .monster-sprite {
+  animation: monsterDie 0.7s ease forwards;
+}
+@keyframes monsterDie {
+  0%   { transform: scale(1) rotate(0); opacity: 1; }
+  40%  { transform: scale(1.4) rotate(15deg); filter: brightness(2.5) blur(1px); }
+  100% { transform: scale(0.2) rotate(720deg); opacity: 0; filter: brightness(0); }
+}
+
+/* 強擊爆炸 */
+.monster.bombed::before {
+  content: '💥';
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 100px;
+  pointer-events: none;
+  animation: bombFlash 0.5s ease;
+  z-index: 5;
+  text-shadow: 0 0 20px #FFD700;
+}
+@keyframes bombFlash {
+  0%   { transform: scale(0); opacity: 0; }
+  40%  { transform: scale(1.6); opacity: 1; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+/* 揮劍特效（白色斜線） */
+.slash-effect {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image: linear-gradient(115deg,
+    transparent 35%, rgba(255,255,255,.0) 40%,
+    rgba(255,255,255,.95) 48%, rgba(255,255,255,.95) 52%,
+    rgba(255,255,255,.0) 60%, transparent 65%);
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  opacity: 0;
+}
+.slash-effect.show {
+  animation: slashSweep 0.35s ease;
+}
+@keyframes slashSweep {
+  0%   { background-position: 100% 100%; opacity: 0; }
+  30%  { opacity: 1; }
+  100% { background-position: 0% 0%; opacity: 0; }
+}
+
+/* ===================================================================
+ * 主角（Steve + 鑽石劍）
+ * =================================================================== */
+.player {
+  position: absolute;
+  left: 4%;
+  bottom: -8px;
+  width: clamp(56px, 14vw, 80px);
+  height: clamp(56px, 14vw, 80px);
+  z-index: 6;
+  pointer-events: none;
+  filter: drop-shadow(0 4px 0 var(--stone-shadow));
+  animation: playerIdle 1.8s ease-in-out infinite;
+}
+.player-sprite {
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  transform-origin: center bottom;
+}
+.player-sprite svg { width: 100%; height: 100%; }
+
+@keyframes playerIdle {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-3px); }
+}
+
+/* 主角揮劍：先衝刺再回位 */
+.player.attack {
+  animation: playerCharge 0.6s cubic-bezier(.4,1.5,.5,1);
+}
+.player.attack .player-sprite {
+  animation: playerSwing 0.6s ease-out;
+}
+@keyframes playerCharge {
+  0%   { transform: translateX(0) translateY(0); }
+  25%  { transform: translateX(8vw) translateY(-14px); }
+  45%  { transform: translateX(22vw) translateY(-4px); }
+  55%  { transform: translateX(22vw) translateY(-4px); }
+  100% { transform: translateX(0) translateY(0); }
+}
+@keyframes playerSwing {
+  0%   { transform: rotate(0)     scale(1);    filter: none; }
+  25%  { transform: rotate(-12deg) scale(1.1); filter: brightness(1.2); }
+  50%  { transform: rotate(20deg)  scale(1.15); filter: brightness(1.3) drop-shadow(0 0 6px #FFE066); }
+  100% { transform: rotate(0)     scale(1);    filter: none; }
+}
+
+/* 主角受擊：往左退 + 紅閃 */
+.player.hurt .player-sprite {
+  animation: playerHurt 0.6s ease;
+}
+@keyframes playerHurt {
+  0%,100% { transform: translateX(0); filter: none; }
+  15%     { transform: translateX(-10px) rotate(-8deg); filter: brightness(0.6) hue-rotate(-30deg) saturate(3); }
+  30%     { transform: translateX(8px)   rotate(6deg);  filter: brightness(0.6) hue-rotate(-30deg) saturate(3); }
+  50%     { transform: translateX(-6px); filter: brightness(0.8) hue-rotate(-20deg); }
+  70%     { transform: translateX(4px); }
+}
+
+/* 擊殺勝利：主角舉劍歡呼 */
+.player.victory .player-sprite {
+  animation: playerVictory 0.7s ease;
+}
+@keyframes playerVictory {
+  0%   { transform: translateY(0)    rotate(0); }
+  30%  { transform: translateY(-12px) rotate(-6deg); filter: brightness(1.4) drop-shadow(0 0 8px #FFD700); }
+  60%  { transform: translateY(-6px)  rotate(6deg); }
+  100% { transform: translateY(0)    rotate(0); }
+}
+
+/* 飄字傷害數字 */
+.damage-num {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  font-family: var(--font-pixel);
+  font-size: 28px;
+  font-weight: bold;
+  pointer-events: none;
+  z-index: 10;
+  animation: floatUp 0.9s ease forwards;
+  text-shadow: 2px 2px 0 #000, -2px -2px 0 #000, 2px -2px 0 #000, -2px 2px 0 #000;
+}
+.damage-num.damage-monster { color: #FF4444; }
+.damage-num.damage-player  { color: #FFD700; top: 60%; }
+.damage-num.gem-bonus      { color: var(--gem); top: 20%; font-size: 22px; }
+@keyframes floatUp {
+  0%   { transform: translate(-50%, 0) scale(0.6); opacity: 0; }
+  20%  { transform: translate(-50%, -10px) scale(1.3); opacity: 1; }
+  100% { transform: translate(-50%, -80px) scale(1); opacity: 0; }
+}
+
+/* 單字卡（縮小，怪物上方仍是主角） */
+.word-card {
+  background: var(--wood);
+  border: var(--tile) solid var(--wood-dark);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--wood-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--wood-dark);
+  padding: 8px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: min(420px, 90vw);
+  justify-content: center;
+}
+.word-card .word-text {
+  font-family: 'Press Start 2P', var(--font-pixel);
+  font-size: clamp(18px, 3.4vw, 28px);
+  color: var(--gold);
+  text-shadow: 2px 2px 0 var(--stone-shadow);
+  letter-spacing: 2px;
+  word-break: break-word;
+}
+
+/* 選項：縮小寬度配合怪物舞台 */
+.options {
+  width: min(560px, 92vw);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.option-btn.eliminated {
+  opacity: 0.25;
+  pointer-events: none;
+  filter: grayscale(1);
+}
+
+/* ===================================================================
+ * 道具列
+ * =================================================================== */
+.item-bar {
+  width: min(520px, 92vw);
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 4px;
+}
+.item-btn {
+  background: var(--stone);
+  border: 3px solid var(--stone-dark);
+  box-shadow:
+    inset 3px 3px 0 var(--stone-light),
+    inset -3px -3px 0 var(--stone-dark),
+    0 3px 0 var(--stone-shadow);
+  font-family: var(--font-pixel);
+  color: var(--text-light);
+  padding: 8px 4px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  transition: transform .08s, filter .15s;
+}
+.item-btn:hover { filter: brightness(1.15); }
+.item-btn:active {
+  transform: translateY(3px);
+  box-shadow: inset 3px 3px 0 rgba(0,0,0,.2),
+              inset -3px -3px 0 rgba(255,255,255,.1),
+              0 0 0 var(--stone-shadow);
+}
+.item-btn.disabled {
+  filter: grayscale(0.7) brightness(0.6);
+  cursor: not-allowed;
+}
+.item-icon {
+  font-size: 22px;
+  filter: drop-shadow(2px 2px 0 rgba(0,0,0,.4));
+}
+.item-count {
+  font-size: 11px;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 var(--stone-dark);
+}
+
+/* ===================================================================
+ * 商店
+ * =================================================================== */
+#shop-screen { justify-content: flex-start; padding: 12px; }
+
+.shop-grid {
+  width: 100%;
+  max-width: 900px;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 14px;
+  padding: 8px;
+}
+.shop-card {
+  background: var(--wood);
+  border: var(--tile) solid var(--wood-dark);
+  box-shadow:
+    inset var(--tile) var(--tile) 0 var(--wood-light),
+    inset calc(var(--tile) * -1) calc(var(--tile) * -1) 0 var(--wood-dark),
+    0 var(--tile) 0 var(--stone-shadow);
+  padding: 14px 10px;
+  text-align: center;
+  font-family: var(--font-pixel);
+  color: var(--text-light);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.shop-emoji {
+  font-size: 48px;
+  filter: drop-shadow(3px 3px 0 rgba(0,0,0,.4));
+  margin-bottom: 4px;
+}
+.shop-name {
+  font-size: 14px;
+  letter-spacing: 1px;
+  color: var(--gold);
+  text-shadow: 1px 1px 0 var(--stone-shadow);
+}
+.shop-desc {
+  font-size: 11px;
+  color: rgba(255,255,255,.85);
+  line-height: 1.5;
+  min-height: 38px;
+  padding: 0 4px;
+}
+.shop-price {
+  font-size: 14px;
+  color: var(--gem);
+  text-shadow: 1px 1px 0 var(--stone-shadow);
+  margin: 4px 0;
+}
+.shop-owned {
+  font-size: 10px;
+  color: rgba(255,255,255,.6);
+  margin-top: 2px;
+}
+
+.select-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+/* ===================================================================
+ * 強烈答對視覺特效
+ * =================================================================== */
+/* 五彩紙屑爆破 */
+.confetti {
+  position: absolute;
+  width: 9px;
+  height: 9px;
+  z-index: 30;
+  pointer-events: none;
+  border: 1px solid rgba(0,0,0,.35);
+  animation: confettiFly 1s ease-out forwards;
+}
+@keyframes confettiFly {
+  0%   { transform: translate(0,0) rotate(0); opacity: 1; }
+  100% { transform: translate(var(--dx), var(--dy)) rotate(var(--rot)); opacity: 0; }
+}
+
+/* Combo 文字（GREAT! / COMBO x N） */
+.combo-text {
+  position: absolute;
+  left: 50%;
+  top: 28%;
+  transform: translateX(-50%);
+  font-family: var(--font-pixel);
+  font-size: clamp(24px, 5vw, 38px);
+  letter-spacing: 3px;
+  color: var(--gold);
+  text-shadow: 3px 3px 0 #000, -3px -3px 0 #000, 3px -3px 0 #000, -3px 3px 0 #000,
+               0 0 16px rgba(255,200,48,.7);
+  z-index: 30;
+  pointer-events: none;
+  animation: comboPop 1.05s ease-out forwards;
+}
+.combo-text.combo-combo   { color: #FFD700; }
+.combo-text.combo-amazing { color: #FF6B00; text-shadow: 3px 3px 0 #000, 0 0 24px #FF8A20; }
+.combo-text.combo-fire    {
+  color: #FF1A4A;
+  text-shadow: 3px 3px 0 #000, 0 0 32px #FF6B00, 0 0 48px #FFD700;
+  animation: comboPopFire 1.2s ease-out forwards;
+}
+@keyframes comboPop {
+  0%   { transform: translate(-50%, 20px) scale(0.3); opacity: 0; }
+  20%  { transform: translate(-50%, -6px) scale(1.5); opacity: 1; }
+  35%  { transform: translate(-50%, 0)    scale(1); }
+  85%  { opacity: 1; }
+  100% { transform: translate(-50%, -50px) scale(0.95); opacity: 0; }
+}
+@keyframes comboPopFire {
+  0%   { transform: translate(-50%, 20px) scale(0.3) rotate(-6deg); opacity: 0; }
+  18%  { transform: translate(-50%, -10px) scale(1.7) rotate(4deg); opacity: 1; }
+  35%  { transform: translate(-50%, 0)    scale(1.1) rotate(-2deg); }
+  60%  { transform: translate(-50%, -10px) scale(1.15) rotate(2deg); }
+  85%  { opacity: 1; }
+  100% { transform: translate(-50%, -60px) scale(1) rotate(0); opacity: 0; }
+}
+
+/* 螢幕綠色閃光 */
+.screen-flash {
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  background: radial-gradient(circle at center,
+                rgba(127,176,64,0.55) 0%,
+                rgba(255,215,0,0.25) 30%,
+                transparent 70%);
+  animation: flashOut 0.42s ease-out forwards;
+  mix-blend-mode: screen;
+}
+@keyframes flashOut {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* 飄字訊息 */
+.flash-msg {
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: var(--font-pixel);
+  font-size: 18px;
+  color: var(--gold);
+  background: rgba(0,0,0,.85);
+  padding: 12px 24px;
+  border: 3px solid var(--stone-dark);
+  z-index: 1000;
+  pointer-events: none;
+  animation: flashIn 1.5s ease forwards;
+  text-shadow: 2px 2px 0 var(--stone-shadow);
+}
+@keyframes flashIn {
+  0%   { opacity: 0; transform: translate(-50%, -30%) scale(0.6); }
+  20%  { opacity: 1; transform: translate(-50%, -50%) scale(1.1); }
+  30%  { transform: translate(-50%, -50%) scale(1); }
+  80%  { opacity: 1; }
+  100% { opacity: 0; transform: translate(-50%, -70%) scale(0.9); }
+}
+
+/* ===================================================================
+ * RWD
+ * =================================================================== */
+@media (max-width: 520px) {
+  .options { grid-template-columns: 1fr; }
+  .hud { padding: 8px 10px; gap: 6px; }
+  .word-block { padding: 12px; }
+  .level-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 8px; }
+  .level-card { min-height: 120px; padding: 8px 4px; }
+  .level-emoji { font-size: 26px; }
+  .level-name { font-size: 11px; min-height: 28px; }
+}
+
+/* 橫式手機／平板：元素更緊湊 */
+@media (orientation: landscape) and (max-height: 500px) {
+  .screen { padding: 8px; justify-content: flex-start; }
+  .hud { margin-bottom: 6px; }
+  .stage { gap: 6px; }
+  .word-image { width: 60px; height: 60px; }
+  .word-text { font-size: 18px; }
+  .option-btn { min-height: 40px; padding: 6px 10px; }
+  .pixel-title { font-size: 22px; margin-bottom: 6px; }
+  .rule-list { font-size: 11px; line-height: 1.4; }
+  .level-grid { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; }
+  .level-card { min-height: 100px; padding: 6px 4px; }
+  .level-emoji { font-size: 22px; margin: 2px 0; }
+  .level-name { font-size: 10px; min-height: 24px; }
+  .star-display { font-size: 28px; margin: 8px 0; letter-spacing: 6px; }
+  .level-title { font-size: 12px; margin-bottom: 4px; }
+}
